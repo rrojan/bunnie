@@ -1,12 +1,16 @@
-# bunnie
+# Bunnie
 
-To install dependencies:
+Implementing ExpressJS from scratch, for Typescript & Bun
+
+## Usage
+
+To install dependencies run:
 
 ```bash
 bun install
 ```
 
-To run:
+Run the server:
 
 ```bash
 bun run main.ts
