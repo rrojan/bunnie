@@ -9,8 +9,8 @@ export const statusLines: Partial<Record<HttpStatus, string>> = {
 class HttpResponse {
   constructor(
     public status: HttpStatus,
-    public headers?: string,
-    public body?: string
+    public headers: string = '',
+    public body: string = ''
   ) {}
 
   buildHttpResponse(): string {
@@ -24,6 +24,11 @@ class HttpResponse {
     // Build body
     response += this.body || ''
     return response
+  }
+
+  json(obj: Object) {
+    this.headers += 'Content-Type: application/json' + CRLF
+    this.body = JSON.stringify(obj)
   }
 }
 

@@ -3,6 +3,8 @@ import type { HttpMethod } from '../http'
 import HttpRequest from '../http/request'
 import { notFound } from './handlers'
 import type { Handler } from './index.d'
+import HttpResponse from '../http/response'
+import { HttpStatus } from '../http/constants'
 
 class App {
   private server
@@ -22,7 +24,8 @@ class App {
     const request = new HttpRequest(requestBuffer)
     const handler =
       this.routes[request.path]?.[request.method as HttpMethod] || notFound
-    const response = handler(request)
+    const response = new HttpResponse(HttpStatus.OK, undefined, undefined)
+    handler(request, response)
     socket.write(response.buildHttpResponse())
     socket.end()
   }
