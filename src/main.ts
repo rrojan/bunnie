@@ -1,12 +1,17 @@
 import App from './core/app'
 import { HttpStatus } from './core/http/constants'
+import htmlString from './index.html' with { type: 'text' }
 
 const PORT = 8000
 
 const app = new App()
 
 app.get('/', (_req, res) => {
-  res.json({ message: 'Hello world' })
+  res.html(htmlString)
+})
+
+app.get('/products', (_req, res) => {
+  res.json({ data: ['Phone', 'Laptop', 'Chargers'] })
 })
 
 app.post('/products', async (req, res) => {

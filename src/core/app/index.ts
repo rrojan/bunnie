@@ -1,4 +1,3 @@
-import { serve } from 'bun'
 import type { HttpMethod } from '../http'
 import type { BunHandler, ExpressHandler } from './index.d'
 import ExpressResponse from './response'
@@ -6,13 +5,17 @@ import ExpressResponse from './response'
 class App {
   private routes: Record<string, Partial<Record<HttpMethod, BunHandler>>> = {}
 
-  private register(method: HttpMethod, path: string, handler: ExpressHandler) {
-    this.routes[path] ??= {}
-    this.routes[path][method] = async (req: Request) => {
+  private adaptHandler(handler: ExpressHandler): BunHandler {
+    return async (req: Request) => {
       const res = new ExpressResponse()
       await handler(req, res)
       return res.buildResponse()
     }
+  }
+
+  private register(method: HttpMethod, path: string, handler: ExpressHandler) {
+    this.routes[path] ??= {}
+    this.routes[path][method] = this.adaptHandler(handler)
   }
 
   private registerFactory(method: HttpMethod) {
@@ -28,7 +31,10 @@ class App {
   delete = this.registerFactory('DELETE')
 
   listen(port: number, cb: Function) {
-    serve({ port, routes: this.routes })
+    Bun.serve({
+      port,
+      routes: this.routes,
+    })
     cb()
   }
 }
