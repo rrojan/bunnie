@@ -24,7 +24,7 @@ class App {
     const request = new HttpRequest(requestBuffer)
     const handler =
       this.routes[request.path]?.[request.method as HttpMethod] || notFound
-    const response = new HttpResponse(HttpStatus.OK, undefined, undefined)
+    const response = new HttpResponse(HttpStatus.OK)
     handler(request, response)
     socket.write(response.buildHttpResponse())
     socket.end()
