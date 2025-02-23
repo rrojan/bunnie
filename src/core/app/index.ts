@@ -1,10 +1,10 @@
 import * as net from 'net'
 import type { HttpMethod } from '../http'
+import { HttpStatus } from '../http/constants'
 import HttpRequest from '../http/request'
+import HttpResponse from '../http/response'
 import { notFound } from './handlers'
 import type { Handler } from './index.d'
-import HttpResponse from '../http/response'
-import { HttpStatus } from '../http/constants'
 
 class App {
   private server

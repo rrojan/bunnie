@@ -1,5 +1,4 @@
 import { BadRequestException } from '../app/errors'
-import type { HttpStatus } from './constants'
 
 class HttpRequest {
   public path: string
