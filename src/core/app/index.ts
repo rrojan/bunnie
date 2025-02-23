@@ -1,8 +1,8 @@
 import * as net from "net";
-import { notFound } from "./handlers";
-import type { Handler } from "./types";
-import type { HttpMethod } from "../http/types";
+import type { HttpMethod } from "../http";
 import HttpRequest from "../http/request";
+import { notFound } from "./handlers";
+import type { Handler } from "./index.d";
 
 class App {
   private server;
@@ -11,10 +11,10 @@ class App {
 
   constructor() {
     this.server = net.createServer((socket) => {
-      socket.on("data", this.handleRequest);
-      socket.on("close", () => {
-        socket.end();
+      socket.on("data", (data: Buffer) => {
+        this.handleRequest(socket, data);
       });
+      socket.on("close", () => socket.end());
     });
   }
 
@@ -23,11 +23,12 @@ class App {
     const handler =
       this.routes[request.path]?.[request.method as HttpMethod] || notFound;
     const response = handler(request);
-    socket.write(response.toString());
+    socket.write(response.buildHttpResponse());
     socket.end();
   };
 
   private register(method: HttpMethod, path: string, handler: Handler) {
+    this.routes[path] ??= {};
     this.routes[path][method] = handler;
   }
 
