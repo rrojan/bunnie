@@ -1,5 +1,5 @@
 import { HttpStatus } from "../http/constants";
-import type { HttpStatusCode } from "../http/types";
+import type { HttpStatusCode } from "../http";
 
 export class HttpException extends Error {
   constructor(
