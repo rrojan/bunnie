@@ -11,8 +11,7 @@ app.get('/', (_req, res) => {
 
 app.post('/products', async (req, res) => {
   let data = await req.json()
-  console.log('HIT', data)
-  res.status(HttpStatus.OK)
+  res.status(HttpStatus.Created)
   res.json({ message: 'Created a new product', data })
 })
 
