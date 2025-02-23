@@ -3,13 +3,14 @@
   "module": "main.ts",
   "type": "module",
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "prettier": "3.5.2"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
   "scripts": {
-    "dev": "bun run src/main.ts"
+    "dev": "bun run src/main.ts",
+    "format": "bun prettier . --write"
   }
 }
-
