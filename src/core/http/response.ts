@@ -8,7 +8,7 @@ export const statusLines: Partial<Record<HttpStatus, string>> = {
 
 class HttpResponse {
   constructor(
-    public status: HttpStatus,
+    public _status: HttpStatus,
     public body: string = '',
     public headers: Record<string, string> = {}
   ) {}
@@ -27,6 +27,14 @@ class HttpResponse {
     // Build body
     response += this.body || ''
     return response
+  }
+
+  get status() {
+    return this._status
+  }
+
+  set status(status: HttpStatus) {
+    this._status = status
   }
 
   json(body: Object) {
