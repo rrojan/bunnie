@@ -2,6 +2,7 @@
   "name": "bunnie",
   "module": "main.ts",
   "type": "module",
+  "dependencies": {},
   "devDependencies": {
     "@types/bun": "latest",
     "prettier": "3.5.2"
@@ -10,7 +11,7 @@
     "typescript": "^5.0.0"
   },
   "scripts": {
-    "dev": "bun run src/main.ts",
+    "dev": "bun --watch src/main.ts",
     "format": "bun prettier . --write"
   }
 }
