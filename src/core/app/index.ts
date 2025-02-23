@@ -15,31 +15,20 @@ class App {
     }
   }
 
-  get(path: string, handler: ExpressHandler) {
-    this.register('GET', path, handler)
+  private registerFactory(method: HttpMethod) {
+    return (path: string, handler: ExpressHandler) => {
+      this.register(method, path, handler)
+    }
   }
 
-  post(path: string, handler: ExpressHandler) {
-    this.register('POST', path, handler)
-  }
-
-  patch(path: string, handler: ExpressHandler) {
-    this.register('PATCH', path, handler)
-  }
-
-  put(path: string, handler: ExpressHandler) {
-    this.register('PUT', path, handler)
-  }
-
-  delete(path: string, handler: ExpressHandler) {
-    this.register('DELETE', path, handler)
-  }
+  get = this.registerFactory('GET')
+  post = this.registerFactory('POST')
+  put = this.registerFactory('PUT')
+  patch = this.registerFactory('PATCH')
+  delete = this.registerFactory('DELETE')
 
   listen(port: number, cb: Function) {
-    serve({
-      port,
-      routes: this.routes,
-    })
+    serve({ port, routes: this.routes })
     cb()
   }
 }
