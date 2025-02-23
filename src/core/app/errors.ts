@@ -12,7 +12,7 @@ export class HttpException extends Error {
 
 export class NotFoundException extends HttpException {
   constructor(message?: string) {
-    super(HttpStatus.NotFound, message || 'Bad Request')
+    super(HttpStatus.NotFound, message || 'Not Found')
   }
 }
 

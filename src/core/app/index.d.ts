@@ -1,4 +1,2 @@
-import type HttpRequest from '../http/request'
-import type HttpResponse from '../http/response'
-
-export type Handler = (request: HttpRequest, response: HttpResponse) => unknown
+export type BunHandler = (request: Request) => Response
+export type ExpressHandler = (request: Request, response: any) => void
