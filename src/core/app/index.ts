@@ -8,9 +8,9 @@ class App {
 
   private register(method: HttpMethod, path: string, handler: ExpressHandler) {
     this.routes[path] ??= {}
-    this.routes[path][method] = (req: Request) => {
+    this.routes[path][method] = async (req: Request) => {
       const res = new ExpressResponse()
-      handler(req, res)
+      await handler(req, res)
       return res.buildResponse()
     }
   }
