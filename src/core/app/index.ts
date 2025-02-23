@@ -1,62 +1,45 @@
-import * as net from 'net'
+import { serve } from 'bun'
 import type { HttpMethod } from '../http'
-import { HttpStatus } from '../http/constants'
-import HttpRequest from '../http/request'
-import HttpResponse from '../http/response'
-import { notFound } from './handlers'
-import type { Handler } from './index.d'
+import type { BunHandler, ExpressHandler } from './index.d'
+import ExpressResponse from './response'
 
 class App {
-  private server
-  private routes: Record<string, Partial<Record<HttpMethod, Handler>>> = {}
-  public host = 'localhost'
+  private routes: Record<string, Partial<Record<HttpMethod, BunHandler>>> = {}
 
-  constructor() {
-    this.server = net.createServer((socket) => {
-      socket.on('data', (data: Buffer) => {
-        this.handleRequest(socket, data)
-      })
-      socket.on('close', () => socket.end())
-    })
-  }
-
-  private handleRequest = (socket: net.Socket, requestBuffer: Buffer) => {
-    const request = new HttpRequest(requestBuffer)
-    const handler =
-      this.routes[request.path]?.[request.method as HttpMethod] || notFound
-    const response = new HttpResponse(HttpStatus.OK)
-    handler(request, response)
-    socket.write(response.buildHttpResponse())
-    socket.end()
-  }
-
-  private register(method: HttpMethod, path: string, handler: Handler) {
+  private register(method: HttpMethod, path: string, handler: ExpressHandler) {
     this.routes[path] ??= {}
-    this.routes[path][method] = handler
+    this.routes[path][method] = (req: Request) => {
+      const res = new ExpressResponse()
+      handler(req, res)
+      return res.buildResponse()
+    }
   }
 
-  get(path: string, handler: Handler) {
+  get(path: string, handler: ExpressHandler) {
     this.register('GET', path, handler)
   }
 
-  post(path: string, handler: Handler) {
+  post(path: string, handler: ExpressHandler) {
     this.register('POST', path, handler)
   }
 
-  patch(path: string, handler: Handler) {
+  patch(path: string, handler: ExpressHandler) {
     this.register('PATCH', path, handler)
   }
 
-  put(path: string, handler: Handler) {
+  put(path: string, handler: ExpressHandler) {
     this.register('PUT', path, handler)
   }
 
-  delete(path: string, handler: Handler) {
+  delete(path: string, handler: ExpressHandler) {
     this.register('DELETE', path, handler)
   }
 
   listen(port: number, cb: Function) {
-    this.server.listen(port, this.host)
+    serve({
+      port,
+      routes: this.routes,
+    })
     cb()
   }
 }
