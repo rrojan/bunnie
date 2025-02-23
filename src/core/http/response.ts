@@ -13,7 +13,7 @@ class HttpResponse {
     public body?: string,
   ) {}
 
-  toString(): string {
+  buildHttpResponse(): string {
     let response = ``;
     // Build status line
     response += statusLines[this.status] || statusLines[HttpStatus.BadRequest];
