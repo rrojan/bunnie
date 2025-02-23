@@ -1,4 +1,4 @@
-export const CRLF = "\r\n";
+export const CRLF = '\r\n'
 
 export enum HttpStatus {
   // 1xx: Informational

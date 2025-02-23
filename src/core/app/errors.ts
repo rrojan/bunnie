@@ -1,23 +1,23 @@
-import { HttpStatus } from "../http/constants";
-import type { HttpStatusCode } from "../http";
+import { HttpStatus } from '../http/constants'
+import type { HttpStatusCode } from '../http'
 
 export class HttpException extends Error {
   constructor(
     public statusCode: HttpStatusCode,
-    message: string,
+    message: string
   ) {
-    super(message);
+    super(message)
   }
 }
 
 export class NotFoundException extends HttpException {
   constructor(message?: string) {
-    super(HttpStatus.NotFound, message || "Bad Request");
+    super(HttpStatus.NotFound, message || 'Bad Request')
   }
 }
 
 export class BadRequestException extends HttpException {
   constructor(message?: string) {
-    super(HttpStatus.BadRequest, message || "Bad Request");
+    super(HttpStatus.BadRequest, message || 'Bad Request')
   }
 }
